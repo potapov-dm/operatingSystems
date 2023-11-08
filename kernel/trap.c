@@ -80,6 +80,19 @@ usertrap(void)
   if(which_dev == 2)
     yield();
 
+if(which_dev == 2 && p->tick_threshold != 0){  
+  p->tick_elapsed+=1;
+  if(p->tick_elapsed == p->tick_threshold){
+    p->tick_elapsed=0;
+    
+    if( p->alarm_not_free==0){
+      p->alarm_not_free=1;
+      *(p->old_trapframe) = *(p->trapframe) ;
+      p->trapframe->epc = p->alarm_handler;
+
+    }
+  }
+}
   usertrapret();
 }
 
